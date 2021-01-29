@@ -8,6 +8,7 @@ A simple server-crud component in vanilla javascript. Easily configured using HT
 
 ![CoCreate](https://cdn.cocreate.app/logo.png)
 
+
 [CoCreate Docs](https://cocreate.app/docs/server-crud)
 
 We want this library to be community-driven, and CoCreate led. We need your help to realize this goal. To help make sure we are building the right things in the right order, we ask that you create [issues](https://github.com/CoCreate-app/Realtime_Admin_CRM_and_CMS/issues) and [pull requests](https://github.com/CoCreate-app/Realtime_Admin_CRM_and_CMS/pulls) or merely upvote or comment on existing issues or pull requests.
