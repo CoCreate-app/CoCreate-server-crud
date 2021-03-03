@@ -1,23 +1,38 @@
 const CoCreateSocket = require('./CoCreate-socket')
 
-module.exports.CoCreateSocketInit = function (socket) {
-	CoCreateSocket.create({
-		namespace: socket.config.organization_Id,
+let socket = null;
+
+function makeCommonParam(config) {
+	return {
+		"apiKey":           config.apiKey,
+		"securityKey":      config.securityKey,
+		"organization_id":  config.organization_Id,
+	}
+}
+
+module.exports.SocketInit = function (socketConfig) {
+	console.log(socketConfig)
+	
+	socket = CoCreateSocket.create({
+		namespace: socketConfig.config.organization_Id,
 		room: null,
-		host: socket.host
+		host: socketConfig.host,
+		prefix: socketConfig.prefix
 	})
-	CoCreateSocket.setGlobalScope(socket.config.organization_Id);
+	CoCreateSocket.setGlobalScope(socketConfig.config.organization_Id);
+	return socket;
+}
+
+module.exports.SocketDestory = function(socketConfig) {
+	let key = CoCreateSocket.getKey(socketConfig.config.organization_Id, null);
+	CoCreateSocket.destroyByKey(key)
 }
 
 //. CreateDocument
 module.exports.CreateDocument = function (info, config) {
 	if (info === null) return;
 	
-	let commonParams = {
-      "apiKey":           config.apiKey,
-      "securityKey":      config.securityKey,
-      "organization_id":  config.organization_Id,
-	}
+	let commonParams = makeCommonParam(config)
 	
 	let request_data = {...info, ...commonParams};
 	CoCreateSocket.send('createDocument', request_data, '')
@@ -27,11 +42,7 @@ module.exports.CreateDocument = function (info, config) {
 module.exports.ReadDocument = function(info, config) {
 	if (info === null) return;
 	
-	let commonParams = {
-      "apiKey":           config.apiKey,
-      "securityKey":      config.securityKey,
-      "organization_id":  config.organization_Id,
-	}
+	let commonParams = makeCommonParam(config)
 	
 	if (!info['document_id'] || !info) {
     	return;
@@ -44,11 +55,7 @@ module.exports.ReadDocument = function(info, config) {
 module.exports.UpdateDocument = function (info, config) {
 	if (info === null) return;
 	
-	let commonParams = {
-      "apiKey":           config.apiKey,
-      "securityKey":      config.securityKey,
-      "organization_id":  config.organization_Id,
-	}
+	let commonParams = makeCommonParam(config)
 	
 	let request_data = {...commonParams};
 	
@@ -66,11 +73,7 @@ module.exports.UpdateDocument = function (info, config) {
 
 module.exports.DeleteDocument = function(info, config) {
 	if (info === null) return;
-	let commonParams = {
-      "apiKey":           config.apiKey,
-      "securityKey":      config.securityKey,
-      "organization_id":  config.organization_Id,
-	}
+	let commonParams = makeCommonParam(config)
 	if (!info['document_id'] || !info) {
     	return;
     }

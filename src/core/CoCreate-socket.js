@@ -6,7 +6,7 @@ location.protocol = "";
 
 const CoCreateSocket = {
 	sockets : new Map(),
-	prefix  : "crud",
+	prefix  : "ws",
 	listeners: new Map(),
 	messageQueue: new Map(),
 	
@@ -25,21 +25,27 @@ const CoCreateSocket = {
 	 * config: {namespace, room, host}
 	 */
 	create: function(config) {
-		const {namespace, room} = config;
+		const {namespace, room, prefix} = config;
+		if (prefix) {
+			this.prefix = prefix;
+		}
+		
 		const key = this.getKey(namespace, room);
+		
+		const protocol = location.protocol === 'http:' ? 'ws' : 'wss';
+		let socket_url = `${protocol}://${location.host}/${key}`;
+		if (config.host) {
+			socket_url = `${protocol}://${config.host}/${key}`;
+		}
+		
+		
 		let _this = this;
 		let socket;
+		
 		if (this.sockets.get(key)) {
 			socket = this.sockets.get(key);
 			console.log('SOcket already has been register');
 			return;
-		}
-		
-		const protocol = location.protocol === 'http:' ? 'ws' : 'wss';
-
-		let socket_url = `${protocol}://${location.host}/${key}`;
-		if (config.host) {
-			socket_url = `${protocol}://${config.host}/${key}`;
 		}
 		
 		console.log(socket_url)
@@ -78,13 +84,7 @@ const CoCreateSocket = {
 		socket.onmessage = function(data) {
 			
 			try {
-				// if (data.data instanceof Blob) {
-				// 	_this.saveFile(data.data);
-				// 	return;
-				// }
 				let rev_data = JSON.parse(data.data);
-				
-				
 				const listeners = _this.listeners.get(rev_data.action);
 				if (!listeners) {
 					return;
@@ -96,6 +96,7 @@ const CoCreateSocket = {
 				console.log(e);
 			}
 		}
+		return socket;
 	},
 	
 	/**
@@ -155,6 +156,13 @@ const CoCreateSocket = {
 		
 		if (this.sockets.get(key)) {
 			this.sockets.delete(key);
+		}
+	},
+	
+	destroyByKey: function(key) {
+		let socket = this.sockets.get(key) 
+		if (socket) {
+			this.destroy(socket, key);
 		}
 	},
 	
