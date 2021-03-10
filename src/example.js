@@ -46,7 +46,8 @@ ServerCrud.CreateDocument({
 	broadcast: false,
 	data: {
 		"name": "CoCreate Server CRUD",
-		"version": "0.0.1"
+		"version": "0.0.1",
+		"organization_id": socket_config.config.organization_Id
 	},
 	
 }, socket_config.config);

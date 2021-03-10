@@ -55,7 +55,6 @@ const CoCreateSocket = {
 		socket.onopen = function(event) {
 			console.log('created socket: ' + key);
 			const messages = _this.messageQueue.get(key) || [];
-			console.log(messages)
 			messages.forEach(msg => socket.send(JSON.stringify(msg)));
 			
 			_this.sockets.set(key, socket);

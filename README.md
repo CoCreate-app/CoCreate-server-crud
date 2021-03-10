@@ -1,7 +1,6 @@
 # CoCreate-server-crud
 A simple server-crud component in vanilla javascript. Easily configured using HTML5 data-attributes and/or JavaScript API. Take it for a spin in our [playground!](https://cocreate.app/docs/server-crud)
 
-![GitHub file size in bytes](https://img.shields.io/github/size/CoCreate-app/CoCreate-server-crud/dist/CoCreate-server-crud.min.js?label=minified%20size&style=for-the-badge) 
 ![GitHub latest release](https://img.shields.io/github/v/release/CoCreate-app/CoCreate-server-crud?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/CoCreate-app/CoCreate-server-crud?style=for-the-badge) 
 ![GitHub labels](https://img.shields.io/github/labels/CoCreate-app/CoCreate-server-crud/help%20wanted?style=for-the-badge)
