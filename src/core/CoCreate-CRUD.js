@@ -60,6 +60,29 @@ function makeDeleteData(info, config) {
     return request_data;
 }
 
+function makeReadList(info, config) {
+	if (info === null) return;
+	
+	let commonParams = makeCommonParam(config)
+	
+	if (!info) {
+    	return;
+    }
+    
+    if (!info.operator) {
+    	info.operator = {filters: [], orders: [], startIndex: 0, search: {}};
+    } else {
+    	if (!info.operator.filters) info.operator.filters = [];
+    	if (!info.operator.orders) info.operator.orders = [];
+    	if (!info.operator.startIndex) info.operator.startIndex = 0;
+    	if (!info.operator.search) info.operator.search = {};
+    }
+
+    let request_data = {...info, ...commonParams};
+    return request_data;
+}
+
+
 //. General CRUD functions
 module.exports.SocketInit = function (socketConfig) {
 	let socket = CoCreateSocket.create({
@@ -202,7 +225,22 @@ async function sendAndReceiveAsync(socket, type, data)
 		console.log(error)
 		return null;
 	}
-	
+}
+
+module.exports.ReadDocumentListAsync = async function(socket, info, config) {
+	try {
+		if (!socket || !info) return null;
+		let request_data = makeReadList(info, config)
+		if (request_data) {
+		    let data = await sendAndReceiveAsync(socket, 'readDocumentList', request_data);
+		    return data;
+		}
+		return null;
+		
+	} catch (error) {
+		console.log(error)
+		return null;
+	}
 }
 
 module.exports.SocketDestoryAsync = async function(socket) {

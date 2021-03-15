@@ -19,26 +19,35 @@ async function runFunc() {
     let socket = await ServerCrud.SocketInitAsync(socket_config);
     let data = null;
     if (socket) {
-      data = await ServerCrud.ReadDocumentAsync(
+      // data = await ServerCrud.ReadDocument(
+      //         socket, 
+      //         {
+      //           collection: "server-crud",
+      //           document_id: "603fce3c89f1ed08c4505a21"
+      //         }, 
+      //         socket_config.config
+      //       );
+
+      data = await ServerCrud.ReadDocumentListAsync(
               socket, 
               {
                 collection: "server-crud",
-                document_id: "603fce3c89f1ed08c4505a21"
+                // is_collection: false,
+                // operator: {
+                //   filters: [],
+                //   orders: [],
+                //   startIndex: 0,
+                //   search: {
+                //     type: 'or',
+                //     value: []
+                //   }
+                // }
               }, 
               socket_config.config
             );
       
-      // console.log('data1 --->', data);
-      // data = await ServerCrud.ReadDocumentAsync(
-      //         socket, 
-      //         {
-      //           collection: "render_test",
-      //           document_id: "5f5aeace3a7246b7cf2e4002"
-      //         }, 
-      //         socket_config.config
-      //       );
-      // console.log('data2 --->', data)
      	await ServerCrud.SocketDestoryAsync(socket)
+     	data = data.data;
     }
     return data;
   } catch (error) {
